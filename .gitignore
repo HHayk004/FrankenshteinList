@@ -1,0 +1,45 @@
+# Ignore compiled files
+*.o
+*.out
+*.exe
+
+# Ignore build directories
+build/
+bin/
+Debug/
+Release/
+
+# Ignore generated files
+Makefile
+CMakeLists.txt.user
+CMakeFiles/
+cmake-build-debug/
+
+# Ignore IDE files
+.vscode/
+.idea/
+*.suo
+*.user
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.pdb
+*.ipch/
+
+# Ignore system-specific files
+Thumbs.db
+.DS_Store
+
+# Ignore backup files
+*~
+
+# Ignore compiled header files
+*.gch
+
+# Ignore log files
+*.log
+
+# Ignore package files
+*.zip
+*.tar.gz
+*.tar
