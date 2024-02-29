@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-namespace vhuk {
+namespace hayk {
 
 template <typename T>
 class FrankList;
@@ -404,13 +404,16 @@ public:
     template <typename unary_predicate>
     void traverse(unary_predicate func, bool sorted = false, bool reversed = false); //O(n)
 
-    void print(bool sorted = false, bool reversed = false); //O(n)
+    void print(bool sorted = false, bool reversed = false) const; //O(n)
 
 protected:
     void put_in_sorted_order(Node* ptr); //O(n)
     void organize_left(Node* ptr); //O(1)
     void organize_right(Node* ptr); //O(1)
 private:
+    template <typename T>
+    void ascDescDefinition(Node*& node);
+
     template <typename iter>
     iter insert_def(iter pos, const_reference val); //O(1)
     
@@ -425,6 +428,6 @@ private:
 };
 }
 
-
+#include "FList.hpp"
 
 #endif // FLIST_H
