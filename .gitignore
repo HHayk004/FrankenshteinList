@@ -2,6 +2,7 @@
 *.o
 *.out
 *.exe
+main.cpp
 
 # Ignore build directories
 build/
