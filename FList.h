@@ -411,7 +411,6 @@ protected:
     void organize_left(Node* ptr); //O(1)
     void organize_right(Node* ptr); //O(1)
 private:
-    template <typename T>
     void ascDescDefinition(Node*& node);
 
     template <typename iter>
