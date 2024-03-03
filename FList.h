@@ -151,11 +151,7 @@ public:
         asc_iterator(const base_iterator& rhv); //O(1)
         asc_iterator(base_iterator&& rhv); //O(1)
 
-        reference operator*(); //O(1)
-        pointer operator->(); //O(1)
-
-        const asc_iterator& operator=(const base_iterator& rhv); //O(1)
-        const asc_iterator& operator=(base_iterator&& rhv); //O(1)
+        reference operator*(); //O(1)const_iterator_iterator&& rhv); //O(1)
         
     protected:
         explicit asc_iterator(Node* ptr); //O(1)
