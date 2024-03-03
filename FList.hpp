@@ -693,6 +693,102 @@ void FrankList<T>::push_front(const_reference elem)
 }
 
 template <typename T>
+void FrankList<T>::pop_back()
+{
+    if (head == nullptr)
+    {
+        std::cerr << "Error in pop_back:\n";
+        exit(-1);
+    }
+
+    Node* del_node = tail;
+
+    if (del_node == head)
+    {
+        head = nullptr;
+        tail = nullptr;
+        ahead = nullptr;
+        atail = nullptr;
+    }
+
+    else
+    {
+        tail = tail->prev;
+        tail->next = nullptr;
+
+        if (del_node == ahead)
+        {
+            ahead = ahead->asc;
+        }
+
+        else if (del_node == atail)
+        {
+            atail = atail->desc;
+        }
+    }
+
+    if (del_node->desc)
+    {
+        del_node->desc->asc = del_node->asc;
+    }
+
+    if (del_node->asc)
+    {
+        del_node->asc->desc = del_node->desc;
+    }
+
+    delete del_node;
+}
+
+template <typename T>
+void FrankList<T>::pop_front()
+{
+    if (head == nullptr)
+    {
+        std::cerr << "Error in pop_back:\n";
+        exit(-1);
+    }
+
+    Node* del_node = head;
+
+    if (del_node == tail)
+    {
+        head = nullptr;
+        tail = nullptr;
+        ahead = nullptr;
+        atail = nullptr;
+    }
+
+    else
+    {
+        head = head->next;
+        head->prev = nullptr;
+
+        if (del_node == ahead)
+        {
+            ahead = ahead->asc;
+        }
+
+        else if (del_node == atail)
+        {
+            atail = atail->desc;
+        }
+    }
+
+    if (del_node->desc)
+    {
+        del_node->desc->asc = del_node->asc;
+    }
+
+    if (del_node->asc)
+    {
+        del_node->asc->desc = del_node->desc;
+    }
+
+    delete del_node;
+}
+
+template <typename T>
 void FrankList<T>::ascDescDefinition(Node*& node)
 {
     Node* prev_tmp = ahead;
