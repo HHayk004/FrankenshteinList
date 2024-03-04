@@ -406,12 +406,11 @@ protected:
     void put_in_sorted_order(Node* ptr); //O(n)
     void organize_left(Node* ptr); //O(1)
     void organize_right(Node* ptr); //O(1)
-private:
-    void ascDescDefinition(Node*& node);
 
+private:
     template <typename iter>
     iter insert_def(iter pos, const_reference val); //O(1)
-    
+
     template <typename iter>
     iter insert_rev(iter pos, const_reference val); //O(1)
 

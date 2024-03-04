@@ -160,13 +160,13 @@ typename FrankList<T>::const_iterator FrankList<T>::cend() const
 //
 
 template <typename T>
-FrankList<T>::iterator::iterator(Node* ptr) : const_iterator(ptr) {}
+FrankList<T>::iterator::iterator(Node* ptr) : const_iterator(base_iterator(ptr)) {}
 
 template <typename T>
-FrankList<T>::iterator::iterator(const base_iterator& rhv) : const_iterator(rhv.ptr) {}
+FrankList<T>::iterator::iterator(const base_iterator& rhv) : const_iterator(rhv) {}
 
 template <typename T>
-FrankList<T>::iterator::iterator(base_iterator&& rhv) : const_iterator(std::move(rhv.ptr)) {
+FrankList<T>::iterator::iterator(base_iterator&& rhv) : const_iterator(std::move(rhv)) {
     rhv.ptr = nullptr;
 }
 
@@ -213,10 +213,10 @@ typename FrankList<T>::iterator FrankList<T>::end()
 //
 
 template <typename T>
-FrankList<T>::const_reverse_iterator::const_reverse_iterator(const base_iterator& rhv) : base_iterator(rhv.ptr) {}
+FrankList<T>::const_reverse_iterator::const_reverse_iterator(const base_iterator& rhv) : base_iterator(rhv) {}
 
 template <typename T>
-FrankList<T>::const_reverse_iterator::const_reverse_iterator(base_iterator&& rhv) : base_iterator(std::move(rhv.ptr))
+FrankList<T>::const_reverse_iterator::const_reverse_iterator(base_iterator&& rhv) : base_iterator(std::move(rhv))
 {
     rhv.ptr = nullptr;
 }
@@ -306,13 +306,13 @@ typename FrankList<T>::const_reverse_iterator FrankList<T>::crend() const
 //
 
 template <typename T>
-FrankList<T>::reverse_iterator::reverse_iterator(Node* ptr) : const_reverse_iterator(ptr) {}
+FrankList<T>::reverse_iterator::reverse_iterator(Node* ptr) : const_reverse_iterator(base_iterator(ptr)) {}
 
 template <typename T>
-FrankList<T>::reverse_iterator::reverse_iterator(const base_iterator& rhv) : const_reverse_iterator(rhv.ptr) {}
+FrankList<T>::reverse_iterator::reverse_iterator(const base_iterator& rhv) : const_reverse_iterator(rhv) {}
 
 template <typename T>
-FrankList<T>::reverse_iterator::reverse_iterator(base_iterator&& rhv) : const_reverse_iterator(std::move(rhv.ptr)) {
+FrankList<T>::reverse_iterator::reverse_iterator(base_iterator&& rhv) : const_reverse_iterator(std::move(rhv)) {
     rhv.ptr = nullptr;
 }
 
@@ -359,10 +359,10 @@ typename FrankList<T>::reverse_iterator FrankList<T>::rend()
 //
 
 template <typename T>
-FrankList<T>::const_asc_iterator::const_asc_iterator(const base_iterator& rhv) : base_iterator(rhv.ptr) {}
+FrankList<T>::const_asc_iterator::const_asc_iterator(const base_iterator& rhv) : base_iterator(rhv) {}
 
 template <typename T>
-FrankList<T>::const_asc_iterator::const_asc_iterator(base_iterator&& rhv) : base_iterator(std::move(rhv.ptr))
+FrankList<T>::const_asc_iterator::const_asc_iterator(base_iterator&& rhv) : base_iterator(std::move(rhv))
 {
     rhv.ptr = nullptr;
 }
@@ -452,13 +452,13 @@ typename FrankList<T>::const_asc_iterator FrankList<T>::caend() const
 //
 
 template <typename T>
-FrankList<T>::asc_iterator::asc_iterator(Node* ptr) : const_asc_iterator(ptr) {}
+FrankList<T>::asc_iterator::asc_iterator(Node* ptr) : const_asc_iterator(base_iterator(ptr)) {}
 
 template <typename T>
-FrankList<T>::asc_iterator::asc_iterator(const base_iterator& rhv) : const_asc_iterator(rhv.ptr) {}
+FrankList<T>::asc_iterator::asc_iterator(const base_iterator& rhv) : const_asc_iterator(rhv) {}
 
 template <typename T>
-FrankList<T>::asc_iterator::asc_iterator(base_iterator&& rhv) : const_asc_iterator(std::move(rhv.ptr)) {
+FrankList<T>::asc_iterator::asc_iterator(base_iterator&& rhv) : const_asc_iterator(std::move(rhv)) {
     rhv.ptr = nullptr;
 }
 
@@ -482,10 +482,10 @@ typename FrankList<T>::asc_iterator FrankList<T>::aend()
 //
 
 template <typename T>
-FrankList<T>::const_desc_iterator::const_desc_iterator(const base_iterator& rhv) : base_iterator(rhv.ptr) {}
+FrankList<T>::const_desc_iterator::const_desc_iterator(const base_iterator& rhv) : base_iterator(rhv) {}
 
 template <typename T>
-FrankList<T>::const_desc_iterator::const_desc_iterator(base_iterator&& rhv) : base_iterator(std::move(rhv.ptr))
+FrankList<T>::const_desc_iterator::const_desc_iterator(base_iterator&& rhv) : base_iterator(std::move(rhv))
 {
     rhv.ptr = nullptr;
 }
@@ -575,13 +575,13 @@ typename FrankList<T>::const_desc_iterator FrankList<T>::cdend() const
 //
 
 template <typename T>
-FrankList<T>::desc_iterator::desc_iterator(Node* ptr) : const_desc_iterator(ptr) {}
+FrankList<T>::desc_iterator::desc_iterator(Node* ptr) : const_desc_iterator(base_iterator(ptr)) {}
 
 template <typename T>
-FrankList<T>::desc_iterator::desc_iterator(const base_iterator& rhv) : const_desc_iterator(rhv.ptr) {}
+FrankList<T>::desc_iterator::desc_iterator(const base_iterator& rhv) : const_desc_iterator(rhv) {}
 
 template <typename T>
-FrankList<T>::desc_iterator::desc_iterator(base_iterator&& rhv) : const_desc_iterator(std::move(rhv.ptr)) {
+FrankList<T>::desc_iterator::desc_iterator(base_iterator&& rhv) : const_desc_iterator(std::move(rhv)) {
     rhv.ptr = nullptr;
 }
 
@@ -667,7 +667,7 @@ void FrankList<T>::push_back(const_reference elem)
     {
         tail->next = new Node (elem);
         tail->next->prev = tail;
-        ascDescDefinition(tail->next);
+        put_in_sorted_order(tail->next);
         tail = tail->next;
     }
 }
@@ -687,7 +687,7 @@ void FrankList<T>::push_front(const_reference elem)
     {
         head->prev = new Node (elem);
         head->prev->next = head;
-        ascDescDefinition(head->prev);
+        put_in_sorted_order(head->prev);
         head = head->prev;
     }
 }
@@ -789,7 +789,62 @@ void FrankList<T>::pop_front()
 }
 
 template <typename T>
-void FrankList<T>::ascDescDefinition(Node*& node)
+template <typename iter>
+iter FrankList<T>::erase(iter pos)
+{
+    if (pos.ptr == head)
+    {
+        ++pos;
+        pop_front();
+        return pos;
+    }
+
+    else if (pos.ptr == tail)
+    {
+        ++pos;
+        pop_back();
+    }
+
+    else
+    {
+        Node* del_node = pos.ptr;
+        
+        del_node->next->prev = del_node->prev;
+        del_node->prev->next = del_node->next;
+    
+        if (del_node->asc)
+        {
+            del_node->asc->desc = del_node->desc;
+        }
+
+        if (del_node->desc)
+        {
+            del_node->desc->asc = del_node->asc;
+        }
+
+        ++pos;
+        delete del_node;
+    }
+
+    return pos;
+}
+
+template <typename T>
+template <typename iter>
+iter FrankList<T>::erase(iter f, iter l)
+{
+    while (f != l)
+    {
+        iter tmp_f = f;
+        ++f;
+        erase(tmp_f);
+    }
+
+    return l;
+}
+
+template <typename T>
+void FrankList<T>::put_in_sorted_order(Node* node)
 {
     Node* prev_tmp = ahead;
     if (prev_tmp->val > node->val)
