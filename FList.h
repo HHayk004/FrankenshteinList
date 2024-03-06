@@ -2,6 +2,7 @@
 #define FLIST_H
 
 #include <iostream>
+#include <type_traits>
 
 namespace hayk {
 
@@ -287,7 +288,7 @@ public:
     FrankList(const FrankList<value_type>& rhv); //O(n)
     FrankList(FrankList<value_type>&& rhv); //O(1)
     FrankList(std::initializer_list<value_type> init); //O(n)
-    template <typename input_iterator>
+    template <typename input_iterator, typename = std::enable_if_t<std::is_base_of_v<base_iterator, input_iterator>>>
     FrankList(input_iterator f, input_iterator l); //O(n)
     ~FrankList();
 

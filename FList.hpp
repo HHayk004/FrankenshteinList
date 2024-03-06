@@ -35,11 +35,44 @@ FrankList<T>::FrankList(size_type size, const_reference init) : FrankList()
 }
 
 template <typename T>
+FrankList<T>::FrankList(const FrankList<value_type>& rhv) : FrankList()
+{
+    for (const_iterator it = rhv.cbegin(); it != rhv.cend(); ++it)
+    {
+        push_back(*it);
+    }
+}
+
+template <typename T>
+FrankList<T>::FrankList(FrankList<value_type>&& rhv)
+{
+    head = std::move(rhv.head);
+    tail = std::move(rhv.tail);
+    ahead = std::move(rhv.ahead);
+    atail = std::move(rhv.atail);
+
+    rhv.head = nullptr;
+    rhv.tail = nullptr;
+    rhv.ahead = nullptr;
+    rhv.atail = nullptr;
+}
+
+template <typename T>
 FrankList<T>::FrankList(std::initializer_list<value_type> init) : FrankList()
 {
     for (auto elem : init)
     {
         push_back(elem);
+    }
+}
+
+template <typename T>
+template <typename input_iterator, typename>
+FrankList<T>::FrankList(input_iterator f, input_iterator l) : FrankList()
+{
+    for (input_iterator it = f; it != l; ++it)
+    {
+        push_back(*it);
     }
 }
 
@@ -68,23 +101,13 @@ FrankList<T>::base_iterator::~base_iterator()
 template <typename T>
 bool FrankList<T>::base_iterator::operator==(const base_iterator& rhv) const
 {
-    if (rhv.ptr)
-    {
-        return this->ptr->val == rhv.ptr->val;
-    }
-
-    return !(this->ptr);
+    return this->ptr == rhv.ptr;
 }
 
 template <typename T>
 bool FrankList<T>::base_iterator::operator!=(const base_iterator& rhv) const
 {
-    if (rhv.ptr)
-    {
-        return this->ptr->val != rhv.ptr->val;
-    }
-
-    return this->ptr;
+    return this->ptr != rhv.ptr;
 }
 
 // Const Iterator
@@ -712,6 +735,14 @@ typename FrankList<T>::desc_iterator FrankList<T>::dend()
 //
 //
 //
+template <typename T>
+void FrankList<T>::swap(FrankList<value_type>& rhv)
+{
+    std::swap(head, rhv.head);
+    std::swap(tail, rhv.tail);
+    std::swap(ahead, rhv.ahead);
+    std::swap(atail, rhv.atail);
+}
 
 template <typename T>
 FrankList<T>::size_type FrankList<T>::size() const
@@ -726,6 +757,12 @@ FrankList<T>::size_type FrankList<T>::size() const
     }
     
     return size;
+}
+
+template <typename T>
+bool FrankList<T>::empty() const
+{
+    return head;
 }
 
 template <typename T>
@@ -887,6 +924,54 @@ void FrankList<T>::pop_front()
     }
 
     delete del_node;
+}
+
+template <typename T>
+FrankList<T>::const_reference FrankList<T>::front() const
+{
+    return head->val;
+}
+
+template <typename T>
+FrankList<T>::reference FrankList<T>::front()
+{
+    return head->val;
+}
+
+template <typename T>
+FrankList<T>::const_reference FrankList<T>::back() const
+{
+    return tail->val;
+}
+
+template <typename T>
+FrankList<T>::reference FrankList<T>::back()
+{
+    return tail->val;
+}
+
+template <typename T>
+FrankList<T>::const_reference FrankList<T>::min() const
+{
+    return ahead->val;
+}
+    
+template <typename T>
+FrankList<T>::reference FrankList<T>::min()
+{
+    return ahead->val;
+}
+
+template <typename T>
+FrankList<T>::const_reference FrankList<T>::max() const
+{
+    return ahead->val;
+}
+
+template <typename T>
+FrankList<T>::reference FrankList<T>::max()
+{
+    return atail->val;
 }
 
 template <typename T>

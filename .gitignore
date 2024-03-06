@@ -5,6 +5,7 @@
 main.cpp
 
 # Ignore build directories
+build/
 bin/
 
 # Ignore CMake files
