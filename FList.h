@@ -59,9 +59,9 @@ public:
         const_pointer operator->() const; //O(1)
 
         const const_iterator& operator++(); //O(1)
-        const const_iterator operator++(value_type); //O(1)
+        const const_iterator operator++(int); //O(1)
         const const_iterator& operator--(); //O(1)
-        const const_iterator operator--(value_type); //O(1)
+        const const_iterator operator--(int); //O(1)
 
     protected:
         explicit const_iterator(Node* ptr); //O(1)
@@ -98,9 +98,9 @@ public:
         const_pointer operator->() const; //O(1)
 
         const const_reverse_iterator& operator++(); //O(1)
-        const const_reverse_iterator operator++(value_type); //O(1)
+        const const_reverse_iterator operator++(int); //O(1)
         const const_reverse_iterator& operator--(); //O(1)
-        const const_reverse_iterator operator--(value_type); //O(1)
+        const const_reverse_iterator operator--(int); //O(1)
 
     protected:
         explicit const_reverse_iterator(Node* ptr); //O(1)
@@ -136,9 +136,9 @@ public:
         const_pointer operator->() const; //O(1)
 
         const const_asc_iterator& operator++(); //O(1)
-        const const_asc_iterator operator++(value_type); //O(1)
+        const const_asc_iterator operator++(int); //O(1)
         const const_asc_iterator& operator--(); //O(1)
-        const const_asc_iterator operator--(value_type); //O(1)
+        const const_asc_iterator operator--(int); //O(1)
 
     protected:
         explicit const_asc_iterator(Node* ptr); //O(1)
@@ -151,7 +151,11 @@ public:
         asc_iterator(const base_iterator& rhv); //O(1)
         asc_iterator(base_iterator&& rhv); //O(1)
 
-        reference operator*(); //O(1)const_iterator_iterator&& rhv); //O(1)
+        reference operator*(); //O(1)
+        pointer operator->(); //O(1)
+
+        const asc_iterator& operator=(const base_iterator& rhv); //O(1)
+        const asc_iterator& operator=(base_iterator&& rhv); //O(1)
         
     protected:
         explicit asc_iterator(Node* ptr); //O(1)
@@ -170,9 +174,9 @@ public:
         const_pointer operator->() const; //O(1)
 
         const const_desc_iterator& operator++(); //O(1)
-        const const_desc_iterator operator++(value_type); //O(1)
+        const const_desc_iterator operator++(int); //O(1)
         const const_desc_iterator& operator--(); //O(1)
-        const const_desc_iterator operator--(value_type); //O(1)
+        const const_desc_iterator operator--(int); //O(1)
 
     protected:
         explicit const_desc_iterator(Node* ptr); //O(1)
