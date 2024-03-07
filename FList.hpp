@@ -782,6 +782,11 @@ void FrankList<T>::clear() noexcept
 
         head_tmp = next_tmp;
     }
+
+    head = nullptr;
+    tail = nullptr;
+    ahead = nullptr;
+    atail = nullptr;
 }
 
 template <typename T>
@@ -975,6 +980,251 @@ FrankList<T>::reference FrankList<T>::max()
 }
 
 template <typename T>
+const FrankList<T>& FrankList<T>::operator=(const FrankList<value_type>& rhv)
+{
+    if (this != &rhv)
+    {
+        clear();
+
+        for (const_iterator it = rhv.cbegin(); it != rhv.cend(); ++it)
+        {
+            push_back(*it);
+        }
+    }
+
+    return *this;
+}
+
+template <typename T>
+const FrankList<T>& FrankList<T>::operator=(FrankList<value_type>&& rhv)
+{
+    if (this != &rhv)
+    {
+        clear();
+
+        head = std::move(rhv.head);
+        tail = std::move(rhv.tail);
+        ahead = std::move(rhv.ahead);
+        atail = std::move(rhv.atail);
+
+        rhv.head = nullptr;
+        rhv.tail = nullptr;
+        rhv.ahead = nullptr;
+        rhv.atail = nullptr;
+    }
+
+    return *this;
+}
+
+template <typename T>
+const FrankList<T>& FrankList<T>::operator=(std::initializer_list<value_type> init)
+{
+    clear();
+
+    for (auto elem : init)
+    {
+        push_back(elem);
+    }
+
+    return *this;
+}
+
+template <typename T>
+bool FrankList<T>::operator==(const FrankList<value_type>& rhv) const
+{
+    Node* ptr1 = head;
+    Node* ptr2 = rhv.head;
+    while (ptr1 && ptr2) 
+    {
+        if (ptr1->val != ptr2->val)
+        {
+            return false;
+        }
+
+        ptr1 = ptr1->next;
+        ptr2 = ptr2->next;
+    }
+
+    return !(ptr1 || ptr2);
+}
+
+template <typename T>
+bool FrankList<T>::operator!=(const FrankList<value_type>& rhv) const
+{
+    Node* ptr1 = head;
+    Node* ptr2 = rhv.head;
+    while (ptr1 && ptr2)
+    {
+        if (ptr1->val != ptr2->val)
+        {
+            return true;
+        }
+
+        ptr1 = ptr1->next;
+        ptr2 = ptr2->next;
+    }
+
+    return ptr1 || ptr2;
+}
+
+template <typename T>
+bool FrankList<T>::operator<(const FrankList<value_type>& rhv) const
+{
+    Node* ptr1 = head;
+    Node* ptr2 = rhv.head;
+    while (ptr1 && ptr2)
+    {
+        if (ptr1->val != ptr2->val)
+        {
+            return ptr1->val < ptr2->val;
+        }
+
+        ptr1 = ptr1->next;
+        ptr2 = ptr2->next;
+    }
+
+    return ptr2;
+}
+
+template <typename T>
+bool FrankList<T>::operator<=(const FrankList<value_type>& rhv) const
+{
+    Node* ptr1 = head;
+    Node* ptr2 = rhv.head;
+    while (ptr1 && ptr2)
+    {
+        if (ptr1->val != ptr2->val)
+        {
+            return ptr1->val <= ptr2->val;
+        }
+
+        ptr1 = ptr1->next;
+        ptr2 = ptr2->next;
+    }
+
+    return !ptr1;
+}
+
+template <typename T>
+bool FrankList<T>::operator>(const FrankList<value_type>& rhv) const
+{
+    Node* ptr1 = head;
+    Node* ptr2 = rhv.head;
+    while (ptr1 && ptr2)
+    {
+        if (ptr1->val != ptr2->val)
+        {
+            return ptr1->val > ptr2->val;
+        }
+
+        ptr1 = ptr1->next;
+        ptr2 = ptr2->next;
+    }
+
+    return ptr1;
+}
+
+template <typename T>
+bool FrankList<T>::operator>=(const FrankList<value_type>& rhv) const
+{
+    Node* ptr1 = head;
+    Node* ptr2 = rhv.head;
+    while (ptr1 && ptr2)
+    {
+        if (ptr1->val != ptr2->val)
+        {
+            return ptr1->val >= ptr2->val;
+        }
+
+        ptr1 = ptr1->next;
+        ptr2 = ptr2->next;
+    }
+
+    return !ptr2;
+}
+
+template <typename T>
+template <typename iter>
+iter FrankList<T>::insert(iter pos, size_type size, const_reference val)
+{
+    for (size_type i = 0; i < size; ++i)
+    {
+        pos = insert(pos, val);
+    }
+
+    return pos;
+}
+
+template <typename T>
+template <typename iter>
+iter FrankList<T>::insert(iter pos, std::initializer_list<value_type> init)
+{
+    for (auto elem : init)
+    {
+        pos = insert(pos, elem);
+    }
+
+    return pos;
+}
+
+template <typename T>
+template <typename iter, typename input_iterator>
+iter FrankList<T>::insert(iter pos, input_iterator f, input_iterator l)
+{
+    for (input_iterator it = f; it != l; ++it)
+    {
+        pos = insert(pos, *it);
+    }
+
+    return pos;
+}
+
+template <typename T>
+template <typename iter>
+iter FrankList<T>::insert_def(iter pos, const_reference val)
+{
+    if (pos.ptr == head)
+    {
+        push_front(val);
+        return iter(base_iterator(head));
+    }
+
+    else if (pos.ptr == tail)
+    {
+        push_back(val);
+    }
+
+    else
+    {
+        Node* next_node = pos.ptr;
+        Node* prev_node = next_node->prev;
+
+        Node* new_node = new Node(val);
+
+        prev_node->next = new_node;
+
+        new_node->next = next_node;
+        new_node->prev = prev_node;
+
+        next_node->prev = new_node;
+
+        put_in_sorted_order(new_node);
+    }
+
+    return pos;
+}
+
+template <typename T>
+template <typename iter>
+iter FrankList<T>::insert_rev(iter pos, const_reference val)
+{
+    insert_def(pos, val);
+    ++pos;
+
+    return pos;
+}
+
+template <typename T>
 template <typename iter>
 iter FrankList<T>::erase(iter pos)
 {
@@ -1011,49 +1261,6 @@ iter FrankList<T>::erase(iter pos)
         ++pos;
         delete del_node;
     }
-
-    return pos;
-}
-template <typename T>
-template <typename iter>
-iter FrankList<T>::insert_def(iter pos, const_reference val)
-{
-    if (pos.ptr == head)
-    {
-        push_front(val);
-    }
-
-    else if (pos.ptr == tail)
-    {
-        push_back(val);
-    }
-
-    else
-    {
-        Node* next_node = pos.ptr;
-        Node* prev_node = next_node->prev;
-
-        Node* new_node = new Node(val);
-
-        prev_node->next = new_node;
-
-        new_node->next = next_node;
-        new_node->prev = prev_node;
-
-        next_node->prev = new_node;
-
-        put_in_sorted_order(new_node);
-    }
-
-    return pos;
-}
-
-template <typename T>
-template <typename iter>
-iter FrankList<T>::insert_rev(iter pos, const_reference val)
-{
-    insert_def(pos, val);
-    ++pos;
 
     return pos;
 }
@@ -1109,6 +1316,36 @@ void FrankList<T>::sort(bool reversed)
 }
 
 template <typename T>
+typename FrankList<T>::iterator FrankList<T>::find(const_reference elem)
+{
+    for (iterator it = begin(); it != end(); ++it)
+    {
+        if (*it == elem)
+        {
+            organize_left(it.ptr);
+            return it;
+        }
+    }
+
+    return iterator(base_iterator(nullptr));
+}
+
+template <typename T>
+typename FrankList<T>::iterator FrankList<T>::rfind(const_reference elem)
+{
+    for (reverse_iterator it = rbegin(); it != rend(); ++it)
+    {
+        if (*it == elem)
+        {
+            organize_right(it.ptr);
+            return it;
+        }
+    }
+
+    return iterator(base_iterator(nullptr));
+}
+
+template <typename T>
 void FrankList<T>::put_in_sorted_order(Node* node)
 {
     Node* prev_tmp = ahead;
@@ -1140,6 +1377,80 @@ void FrankList<T>::put_in_sorted_order(Node* node)
 
     prev_tmp->asc = node;
     node->desc = prev_tmp;
+}
+
+template <typename T>
+void FrankList<T>::organize_left(Node* ptr)
+{
+    if (ptr != head)
+    {
+        Node* node_prev = ptr->prev;
+        Node* node_prpr = node_prev->prev;
+        Node* node_next = ptr->next;
+
+        if (node_prev == head)
+        {
+            head = ptr;
+        }
+
+        if (ptr == tail)
+        {
+            tail = node_prev;
+        }
+
+        if (node_prpr)
+        {
+            node_prpr->next = ptr;
+        }
+
+        node_prev->prev = ptr;
+        node_prev->next = node_next;
+
+        ptr->prev = node_prpr;
+        ptr->next = node_prev;
+
+        if (node_next)
+        {
+            node_next->prev = node_prev;
+        }
+    }
+}
+
+template <typename T>
+void FrankList<T>::organize_right(Node* ptr)
+{
+    if (ptr != tail)
+    {
+        Node* node_prev = ptr->prev;
+        Node* node_next = ptr->next;
+        Node* node_nxnx = node_next->next;
+
+        if (ptr == head)
+        {
+            head = node_next;
+        }
+
+        if (node_next == tail)
+        {
+            tail = ptr;
+        }
+
+        if (node_prev)
+        {
+            node_prev->next = node_next;
+        }
+
+        node_next->prev = node_prev;
+        node_next->next = ptr;
+
+        ptr->prev = node_next;
+        ptr->next = node_nxnx;
+
+        if (node_nxnx)
+        {
+            node_nxnx->prev = ptr;
+        }
+    }
 }
 
 template <typename T>
