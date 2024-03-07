@@ -766,6 +766,29 @@ bool FrankList<T>::empty() const
 }
 
 template <typename T>
+void FrankList<T>::resize(size_type size, const_reference init)
+{
+    size_type m_size = this->size();
+    if (size > m_size)
+    {
+        size_type delta = size - m_size;
+        for (size_type i = 0; i < delta; ++i)
+        {
+            push_back(init);
+        }
+    }
+
+    else
+    {
+        size_type delta = m_size - size;
+        for (size_type i = 0; i < delta; ++i)
+        {
+            pop_back();
+        }
+    }
+}
+
+template <typename T>
 void FrankList<T>::clear() noexcept
 {
     Node* head_tmp = head;
@@ -1271,12 +1294,55 @@ iter FrankList<T>::erase(iter f, iter l)
 {
     while (f != l)
     {
-        iter tmp_f = f;
-        ++f;
-        erase(tmp_f);
+        f = erase(f);
     }
 
     return l;
+}
+
+template <typename T>
+FrankList<T>::size_type FrankList<T>::remove(const_reference val)
+{
+    const_iterator it = cbegin();
+    size_type count = 0;
+    while (it != cend())
+    {
+        if (*it == val)
+        {
+            it = erase(it);
+            ++count;
+        }
+
+        else
+        {
+            ++it;
+        }
+    }
+
+    return count;
+}
+
+template <typename T>
+template <typename unary_predicate>
+FrankList<T>::size_type FrankList<T>::remove_if(unary_predicate func)
+{
+    const_iterator it = cbegin();
+    size_type count = 0;
+    while (it != cend())
+    {
+        if (func(*it))
+        {
+            it = erase(it);
+            ++count;
+        }
+
+        else
+        {
+            ++it;
+        }
+    }
+
+    return count;
 }
 
 template <typename T>
@@ -1343,6 +1409,46 @@ typename FrankList<T>::iterator FrankList<T>::rfind(const_reference elem)
     }
 
     return iterator(base_iterator(nullptr));
+}
+
+template <typename T>
+template <typename unary_predicate>
+void FrankList<T>::traverse(unary_predicate func, bool sorted, bool reversed)
+{
+    if (sorted)
+    {
+        if (reversed)
+        {
+            for (const_desc_iterator it = cdbegin(); it != cdend(); ++it)
+            {
+                func(*it);
+            }
+        }
+
+        else
+        {
+            for (const_asc_iterator it = cabegin(); it != caend(); ++it)
+            {
+                func(*it);
+            }
+        }
+    }
+
+    else if (reversed)
+    {
+        for (const_reverse_iterator it = crbegin(); it != crend(); ++it)
+        {
+            func(*it);
+        }
+    }
+
+    else
+    {
+        for (const_iterator it = cbegin(); it != cend(); ++it)
+        {
+            func(*it);
+        }
+    }
 }
 
 template <typename T>
@@ -1477,25 +1583,24 @@ void FrankList<T>::print(bool sorted, bool reversed) const
         }
     }
 
+    else if (reversed)
+    {
+        for (auto it = crbegin(); it != crend(); ++it)
+        {
+            std::cout << *it << ' ';
+        }
+        
+        std::cout << std::endl;
+    }
+
     else
     {
-        if (reversed)
+        for (auto it = cbegin(); it != cend(); ++it)
         {
-            for (auto it = crbegin(); it != crend(); ++it)
-            {
-                std::cout << *it << ' ';
-            }
-            std::cout << std::endl;
+            std::cout << *it << ' ';
         }
 
-        else
-        {
-            for (auto it = cbegin(); it != cend(); ++it)
-            {
-                std::cout << *it << ' ';
-            } 
-            std::cout << std::endl;
-        }
+        std::cout << std::endl;
     }
 }
 

@@ -298,7 +298,7 @@ public:
     size_type size() const; //O(n)
 
     bool empty() const; //O(1)
-    void resize(size_type s, const_reference init = value_type()); //O(n)
+    void resize(size_type size, const_reference init = value_type()); //O(n)
     void clear() noexcept; //O(n)
 
     void push_front(const_reference elem); //~O(1)
