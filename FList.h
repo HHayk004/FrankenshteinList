@@ -213,9 +213,9 @@ public:
         const_pointer operator->() const; //O(1)
 
         const const_multi_iterator& operator++(); //O(1)
-        const const_multi_iterator operator++(value_type); //O(1)
+        const const_multi_iterator operator++(int); //O(1)
         const const_multi_iterator& operator--(); //O(1)
-        const const_multi_iterator operator--(value_type); //O(1)
+        const const_multi_iterator operator--(int); //O(1)
 
         void chmod(); //O(1)
     protected:
@@ -253,10 +253,9 @@ public:
         const_pointer operator->() const; //O(1)
 
         const const_multi_reverse_iterator& operator++(); //O(1)
-        const const_multi_reverse_iterator operator++(value_type); //O(1)
+        const const_multi_reverse_iterator operator++(int); //O(1)
         const const_multi_reverse_iterator& operator--(); //O(1)
-        const const_multi_reverse_iterator operator--(value_type); //O(1)
-
+        const const_multi_reverse_iterator operator--(int); //O(1)
 
         void chmod(); //O(1)
     protected:
